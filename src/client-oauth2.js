@@ -1,6 +1,8 @@
 var Querystring = require('querystring')
 var Url = require('url')
 var defaultRequest = require('./request')
+var base64 = require('base-64');
+var utf8 = require('utf8');
 
 var btoa = typeof Buffer === 'function' ? btoaBuffer : window.btoa
 
@@ -171,7 +173,12 @@ function createUri (options, tokenType) {
  * @return {string}
  */
 function auth (username, password) {
-  return 'Basic ' + btoa(toString(username) + ':' + toString(password))
+
+  var text = toString(username) + ':' + toString(password);
+  var bytes = utf8.encode(text);
+  var encoded = base64.encode(bytes);
+
+  return 'Basic ' + encoded;
 }
 
 /**
